@@ -1,15 +1,4 @@
-from pathlib import Path
-from zipfile import ZipFile, ZIP_DEFLATED
-import shutil, html, os
-
-base = Path("/mnt/data")
-photo_src = base / "FOTO RR.jpeg"
-work = base / "undangan_ridho_revani"
-work.mkdir(exist_ok=True)
-photo_dst = work / "foto-pengantin.jpeg"
-shutil.copy2(photo_src, photo_dst)
-
-html_doc = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -116,12 +105,3 @@ $('shareBtn').addEventListener('click',()=>{const to=$('guestName').textContent,
 </script>
 </body>
 </html>
-'''
-(work / "index.html").write_text(html_doc, encoding="utf-8")
-zip_path = base / "Undangan_Ridho_Revani_Lengkap.zip"
-with ZipFile(zip_path, "w", ZIP_DEFLATED) as z:
-    z.write(work / "index.html", "index.html")
-    z.write(photo_dst, "foto-pengantin.jpeg")
-html_path = base / "Undangan_Ridho_Revani.html"
-shutil.copy2(work / "index.html", html_path)
-print("Created:", zip_path, html_path, "Photo included:", photo_dst.exists())
